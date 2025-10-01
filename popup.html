@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Search Automator</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Smart Search Automator</h1>
+      <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
+    </header>
+
+    <div class="main-panel" id="mainPanel">
+      <div class="input-section">
+        <label for="searchCount">Number of Searches:</label>
+        <input type="number" id="searchCount" min="1" max="50" value="5" placeholder="Enter 1-50">
+      </div>
+
+      <div class="tags-section">
+        <label>Select Topics:</label>
+        <div class="tags-container">
+          <button class="tag" data-tag="anime">Anime</button>
+          <button class="tag" data-tag="car">Car</button>
+          <button class="tag" data-tag="news">News</button>
+          <button class="tag" data-tag="business">Business</button>
+          <button class="tag" data-tag="movies">Movies</button>
+          <button class="tag" data-tag="entertainment">Entertainment</button>
+          <button class="tag" data-tag="tech">Tech</button>
+          <button class="tag" data-tag="sports">Sports</button>
+          <button class="tag" data-tag="gaming">Gaming</button>
+          <button class="tag" data-tag="food">Food</button>
+          <button class="tag" data-tag="travel">Travel</button>
+          <button class="tag" data-tag="fashion">Fashion</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="runBtn" class="btn btn-primary">▶ Run</button>
+        <button id="stopBtn" class="btn btn-danger" disabled>⬛ Stop</button>
+      </div>
+
+      <div class="status-section">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="status-text" id="statusText">Ready to start</div>
+      </div>
+
+      <div class="log-section">
+        <div class="log-header">
+          <span>Log Terminal</span>
+          <button id="clearLogBtn" class="icon-btn-small">Clear</button>
+        </div>
+        <div class="log-terminal" id="logTerminal">
+          <div class="log-entry log-info">Welcome! Configure your search and press Run.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-panel hidden" id="settingsPanel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="closeSettingsBtn" class="icon-btn">✕</button>
+      </div>
+
+      <div class="setting-item">
+        <label for="scrollDuration">Scroll Duration (seconds):</label>
+        <input type="number" id="scrollDuration" min="5" max="30" value="15">
+        <span class="setting-hint">Time to scroll on each page (5-30s)</span>
+      </div>
+
+      <div class="setting-item">
+        <label for="apiKey">Gemini API Key:</label>
+        <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
+        <span class="setting-hint">Required for generating search queries</span>
+      </div>
+
+      <div class="setting-item">
+        <button id="saveSettingsBtn" class="btn btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
