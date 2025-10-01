@@ -4,6 +4,15 @@
 
 Smart Search Automator is a Chrome browser extension that automates web searches using AI-generated queries. The extension leverages Google's Gemini AI API to create unique, contextual search queries across multiple topics, then simulates human-like browsing behavior including realistic scrolling patterns and timing. Users can configure the number of searches, select topic categories, and monitor automation progress through a real-time logging interface.
 
+**Status**: ✅ Complete and ready for use (October 1, 2025)
+
+## Recent Changes (October 1, 2025)
+
+1. **Security Improvements**: Reduced permissions scope to minimum required - limited to only Google and Gemini API domains
+2. **Immediate Stop Feature**: Stop button now immediately halts automation, closes active tab, and stops scrolling
+3. **Reliability Enhancements**: Added tab load detection and retry logic for message passing to prevent race conditions
+4. **Permission Minimization**: Removed unnecessary "scripting" and "activeTab" permissions
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
