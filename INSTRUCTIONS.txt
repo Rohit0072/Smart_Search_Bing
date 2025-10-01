@@ -1,0 +1,98 @@
+SMART SEARCH AUTOMATOR - CHROME EXTENSION
+==========================================
+
+INSTALLATION INSTRUCTIONS:
+--------------------------
+
+1. Get a Gemini API Key:
+   - Go to https://makersuite.google.com/app/apikey
+   - Sign in with your Google account
+   - Click "Create API Key"
+   - Copy the API key (you'll need this later)
+
+2. Load the Extension in Chrome:
+   - Open Google Chrome
+   - Go to chrome://extensions/
+   - Enable "Developer mode" (toggle in top-right corner)
+   - Click "Load unpacked"
+   - Select the folder containing these files
+   - The extension should now appear in your extensions list
+
+3. Pin the Extension:
+   - Click the puzzle piece icon in Chrome toolbar
+   - Find "Smart Search Automator"
+   - Click the pin icon to keep it visible
+
+HOW TO USE:
+-----------
+
+1. Configure Settings (First Time):
+   - Click the extension icon
+   - Click the settings gear icon (⚙️)
+   - Enter your Gemini API Key
+   - Set scroll duration (default: 15 seconds)
+   - Click "Save Settings"
+
+2. Run Automated Searches:
+   - Click the extension icon
+   - Enter number of searches (1-50)
+   - Select one or more topic tags
+   - Click "▶ Run"
+   - Watch the log terminal for progress
+   - Use "⬛ Stop" button to halt anytime
+
+FEATURES:
+---------
+
+✓ AI-Generated Searches: Uses Gemini to create unique, contextual queries
+✓ Multiple Topics: Select from 12 different categories
+✓ Human-Like Behavior: Random scrolling patterns with pauses
+✓ Real-Time Logs: Debug terminal shows every action
+✓ Configurable: Adjust scroll duration (5-30 seconds)
+✓ Progress Tracking: Visual progress bar and status updates
+✓ Stop Anytime: Emergency stop button to halt automation
+
+TAGS AVAILABLE:
+---------------
+- Anime        - Business      - Car
+- Entertainment- Fashion       - Food
+- Gaming       - Movies        - News
+- Sports       - Tech          - Travel
+
+TIPS:
+-----
+- Start with 5-10 searches to test
+- Mix multiple tags for diverse results
+- Monitor the log terminal for any issues
+- Adjust scroll duration based on your needs
+- The extension opens tabs in the background
+
+TROUBLESHOOTING:
+----------------
+
+If searches don't start:
+→ Check that you've entered a valid Gemini API key
+→ Ensure you've selected at least one tag
+→ Check browser console (F12) for errors
+
+If scrolling doesn't work:
+→ Ensure content script has proper permissions
+→ Reload the extension and try again
+
+If API errors occur:
+→ Verify your API key is correct
+→ Check you haven't exceeded API quota
+→ Try reducing the number of searches
+
+NOTES:
+------
+- Searches run in background tabs automatically
+- Each search opens, scrolls, and closes automatically
+- The extension respects your scroll duration setting
+- All actions are logged in the terminal for transparency
+- You can stop the automation at any time
+
+SUPPORT:
+--------
+For issues or questions, check the Chrome Developer Tools console
+for detailed error messages (F12 → Console tab)
