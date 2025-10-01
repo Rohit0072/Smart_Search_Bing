@@ -5,13 +5,11 @@
   "description": "Automate unique searches using Gemini AI with human-like browsing behavior",
   "permissions": [
     "tabs",
-    "scripting",
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "host_permissions": [
     "https://www.google.com/*",
-    "<all_urls>"
+    "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -31,7 +29,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://www.google.com/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }

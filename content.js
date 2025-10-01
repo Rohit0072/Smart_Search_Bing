@@ -9,6 +9,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       sendResponse({ status: 'already_scrolling' });
     }
+  } else if (request.action === 'stopScrolling') {
+    stopScrolling();
+    sendResponse({ status: 'stopped' });
   }
   return true;
 });

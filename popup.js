@@ -4,6 +4,7 @@ let shouldStop = false;
 let currentSearchIndex = 0;
 let totalSearches = 0;
 let generatedQueries = [];
+let currentTabId = null;
 
 const elements = {
   searchCount: document.getElementById('searchCount'),
@@ -138,10 +139,24 @@ async function startAutomation() {
   });
 }
 
-function stopAutomation() {
+async function stopAutomation() {
   shouldStop = true;
-  log('Stop requested - finishing current search and stopping...', 'warning');
+  log('Stop requested - stopping immediately...', 'warning');
   elements.stopBtn.disabled = true;
+  
+  if (currentTabId) {
+    try {
+      chrome.tabs.sendMessage(currentTabId, { action: 'stopScrolling' });
+      await chrome.tabs.remove(currentTabId);
+      currentTabId = null;
+      log('Current tab closed', 'info');
+    } catch (error) {
+      log(`Error stopping tab: ${error.message}`, 'warning');
+    }
+  }
+  
+  resetUI();
+  updateStatus('Stopped');
 }
 
 async function generateSearchQueries(count, tags, apiKey) {
@@ -247,28 +262,100 @@ async function performSearch(query) {
         const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
         
         const tab = await chrome.tabs.create({ url: searchUrl, active: false });
+        currentTabId = tab.id;
         
-        await sleep(2000);
+        await waitForTabLoad(tab.id);
         
-        chrome.tabs.sendMessage(tab.id, { 
+        if (shouldStop) {
+          resolve();
+          return;
+        }
+        
+        const messageSent = await sendScrollMessage(tab.id, scrollDuration);
+        
+        if (!messageSent) {
+          log('Failed to send scroll message after retries', 'warning');
+        }
+        
+        await sleep(scrollDuration * 1000 + 1000);
+        
+        if (shouldStop) {
+          resolve();
+          return;
+        }
+        
+        try {
+          await chrome.tabs.remove(tab.id);
+        } catch (e) {
+        }
+        
+        currentTabId = null;
+        resolve();
+      });
+    } catch (error) {
+      currentTabId = null;
+      reject(error);
+    }
+  });
+}
+
+async function waitForTabLoad(tabId) {
+  return new Promise((resolve) => {
+    const checkTab = (id, changeInfo, tab) => {
+      if (id === tabId && changeInfo.status === 'complete') {
+        chrome.tabs.onUpdated.removeListener(checkTab);
+        chrome.tabs.onRemoved.removeListener(checkRemoved);
+        resolve();
+      }
+    };
+    
+    const checkRemoved = (id) => {
+      if (id === tabId) {
+        chrome.tabs.onUpdated.removeListener(checkTab);
+        chrome.tabs.onRemoved.removeListener(checkRemoved);
+        resolve();
+      }
+    };
+    
+    chrome.tabs.onUpdated.addListener(checkTab);
+    chrome.tabs.onRemoved.addListener(checkRemoved);
+    
+    setTimeout(() => {
+      chrome.tabs.onUpdated.removeListener(checkTab);
+      chrome.tabs.onRemoved.removeListener(checkRemoved);
+      resolve();
+    }, 10000);
+  });
+}
+
+async function sendScrollMessage(tabId, scrollDuration) {
+  let attempts = 0;
+  const maxAttempts = 3;
+  
+  while (attempts < maxAttempts && !shouldStop) {
+    try {
+      await new Promise((resolve, reject) => {
+        chrome.tabs.sendMessage(tabId, { 
           action: 'startScrolling',
           duration: scrollDuration * 1000
         }, (response) => {
           if (chrome.runtime.lastError) {
-            log(`Scroll message error (tab may still be loading): ${chrome.runtime.lastError.message}`, 'warning');
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve(response);
           }
         });
-        
-        await sleep(scrollDuration * 1000 + 1000);
-        
-        await chrome.tabs.remove(tab.id);
-        
-        resolve();
       });
+      return true;
     } catch (error) {
-      reject(error);
+      attempts++;
+      if (attempts < maxAttempts) {
+        await sleep(500);
+      }
     }
-  });
+  }
+  
+  return false;
 }
 
 function updateProgress(percent) {

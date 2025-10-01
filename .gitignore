@@ -1,0 +1,16 @@
+.pythonlibs/
+.cache/
+.local/
+.upm/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+pyproject.toml
+uv.lock
