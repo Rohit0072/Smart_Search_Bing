@@ -1,89 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Search Automator</title>
-  <link rel="stylesheet" href="popup.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Search Automator</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Smart Search Automator</h1>
-      <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
-    </header>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> Smart Search Automator</h1>
+            <button class="icon-btn" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+            </button>
+        </header>
 
-    <div class="main-panel" id="mainPanel">
-      <div class="input-section">
-        <label for="searchCount">Number of Searches:</label>
-        <input type="number" id="searchCount" min="1" max="50" value="5" placeholder="Enter 1-50">
-      </div>
+        <div class="main-panel" id="mainPanel">
+            <!-- Daily Status Section -->
+            <div class="daily-status-section">
+                <div class="daily-status-header">
+                    <span><i class="fas fa-calendar-day"></i> Today's Status</span>
+                </div>
+                <div class="daily-status-content">
+                    <div class="status-item">
+                        <div class="status-icon" id="todaySearchStatus">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-label">Today's Search</div>
+                            <div class="status-count" id="todaySearchCount">0 searches</div>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon" id="scheduledSearchStatus">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="status-info">
+                            <div class="status-label">Scheduled</div>
+                            <div class="status-time" id="scheduledTimeDisplay">Not set</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <div class="tags-section">
-        <label>Select Topics:</label>
-        <div class="tags-container">
-          <button class="tag" data-tag="anime">Anime</button>
-          <button class="tag" data-tag="car">Car</button>
-          <button class="tag" data-tag="news">News</button>
-          <button class="tag" data-tag="business">Business</button>
-          <button class="tag" data-tag="movies">Movies</button>
-          <button class="tag" data-tag="entertainment">Entertainment</button>
-          <button class="tag" data-tag="tech">Tech</button>
-          <button class="tag" data-tag="sports">Sports</button>
-          <button class="tag" data-tag="gaming">Gaming</button>
-          <button class="tag" data-tag="food">Food</button>
-          <button class="tag" data-tag="travel">Travel</button>
-          <button class="tag" data-tag="fashion">Fashion</button>
+            <div class="input-section">
+                <label for="searchCount"><i class="fas fa-search"></i> Number of Searches (1-50)</label>
+                <input type="number" id="searchCount" min="1" max="50" value="10">
+            </div>
+
+            <div class="tags-section">
+                <label><i class="fas fa-tags"></i> Select Topic Tags</label>
+                <div class="tags-container">
+                    <div class="tag" data-tag="Technology"><i class="fas fa-laptop-code"></i> Technology</div>
+                    <div class="tag" data-tag="Science"><i class="fas fa-flask"></i> Science</div>
+                    <div class="tag" data-tag="Business"><i class="fas fa-briefcase"></i> Business</div>
+                    <div class="tag" data-tag="Entertainment"><i class="fas fa-film"></i> Entertainment</div>
+                    <div class="tag" data-tag="Sports"><i class="fas fa-football-ball"></i> Sports</div>
+                    <div class="tag" data-tag="Health"><i class="fas fa-heartbeat"></i> Health</div>
+                    <div class="tag" data-tag="Travel"><i class="fas fa-plane"></i> Travel</div>
+                    <div class="tag" data-tag="Food"><i class="fas fa-utensils"></i> Food</div>
+                    <div class="tag" data-tag="Fashion"><i class="fas fa-tshirt"></i> Fashion</div>
+                    <div class="tag" data-tag="Gaming"><i class="fas fa-gamepad"></i> Gaming</div>
+                </div>
+            </div>
+
+            <div class="schedule-section">
+                <label><i class="fas fa-clock"></i> Schedule Daily Search</label>
+                <div class="schedule-controls">
+                    <input type="time" id="scheduleTime" class="time-input">
+                    <button class="btn btn-schedule" id="scheduleBtn">
+                        <i class="fas fa-calendar-plus"></i> Schedule
+                    </button>
+                    <button class="btn btn-cancel-schedule" id="cancelScheduleBtn" style="display: none;">
+                        <i class="fas fa-calendar-times"></i> Cancel
+                    </button>
+                </div>
+                <div class="schedule-status" id="scheduleStatus">No schedule set</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="runBtn">
+                    <i class="fas fa-play"></i> Run
+                </button>
+                <button class="btn btn-danger" id="stopBtn" disabled>
+                    <i class="fas fa-stop"></i> Stop
+                </button>
+            </div>
+
+            <button class="btn btn-debug" id="debugBtn">
+                <i class="fas fa-bug"></i> Debug Current Tab
+            </button>
+
+            <div class="status-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="status-text" id="statusText">Ready</div>
+            </div>
+
+            <div class="log-section">
+                <div class="log-header">
+                    <span><i class="fas fa-terminal"></i> Activity Log</span>
+                    <button class="icon-btn-small" id="clearLogBtn">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+                <div class="log-terminal" id="logTerminal">
+                    <div class="log-entry log-info"><i class="fas fa-info-circle"></i><span>[Ready] Extension loaded</span></div>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="controls">
-        <button id="runBtn" class="btn btn-primary">▶ Run</button>
-        <button id="stopBtn" class="btn btn-danger" disabled>⬛ Stop</button>
-      </div>
+        <div class="settings-panel hidden" id="settingsPanel">
+            <div class="settings-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="icon-btn" id="closeSettingsBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
-      <div class="status-section">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="status-text" id="statusText">Ready to start</div>
-      </div>
+            <!-- Theme selector -->
+            <div class="theme-selector">
+                <label><i class="fas fa-palette"></i> Theme</label>
+                <div class="theme-options">
+                    <div class="theme-option active" data-theme="light">
+                        <input type="radio" name="theme" value="light" id="theme-light" checked>
+                        <div class="theme-preview theme-preview-light"></div>
+                    </div>
+                    <div class="theme-option" data-theme="dark">
+                        <input type="radio" name="theme" value="dark" id="theme-dark">
+                        <div class="theme-preview theme-preview-dark"></div>
+                    </div>
+                    <div class="theme-option" data-theme="blue">
+                        <input type="radio" name="theme" value="blue" id="theme-blue">
+                        <div class="theme-preview theme-preview-blue"></div>
+                    </div>
+                    <div class="theme-option" data-theme="green">
+                        <input type="radio" name="theme" value="green" id="theme-green">
+                        <div class="theme-preview theme-preview-green"></div>
+                    </div>
+                    <div class="theme-option" data-theme="purple">
+                        <input type="radio" name="theme" value="purple" id="theme-purple">
+                        <div class="theme-preview theme-preview-purple"></div>
+                    </div>
+                </div>
+            </div>
 
-      <div class="log-section">
-        <div class="log-header">
-          <span>Log Terminal</span>
-          <button id="clearLogBtn" class="icon-btn-small">Clear</button>
+            <div class="setting-item">
+                <label for="scrollDuration"><i class="fas fa-hourglass-half"></i> Scroll Duration (seconds)</label>
+                <input type="number" id="scrollDuration" min="5" max="30" value="10">
+                <span class="setting-hint">Time to wait between searches (5-30 seconds)</span>
+            </div>
+
+            <div class="setting-item">
+                <label for="apiKey"><i class="fas fa-key"></i> Gemini API Key</label>
+                <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
+                <span class="setting-hint">Required for generating unique search queries</span>
+            </div>
+
+            <button class="btn btn-primary" id="saveSettingsBtn">
+                <i class="fas fa-save"></i> Save Settings
+            </button>
         </div>
-        <div class="log-terminal" id="logTerminal">
-          <div class="log-entry log-info">Welcome! Configure your search and press Run.</div>
-        </div>
-      </div>
     </div>
 
-    <div class="settings-panel hidden" id="settingsPanel">
-      <div class="settings-header">
-        <h2>Settings</h2>
-        <button id="closeSettingsBtn" class="icon-btn">✕</button>
-      </div>
-
-      <div class="setting-item">
-        <label for="scrollDuration">Scroll Duration (seconds):</label>
-        <input type="number" id="scrollDuration" min="5" max="30" value="15">
-        <span class="setting-hint">Time to scroll on each page (5-30s)</span>
-      </div>
-
-      <div class="setting-item">
-        <label for="apiKey">Gemini API Key:</label>
-        <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
-        <span class="setting-hint">Required for generating search queries</span>
-      </div>
-
-      <div class="setting-item">
-        <button id="saveSettingsBtn" class="btn btn-primary">Save Settings</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
 </html>
