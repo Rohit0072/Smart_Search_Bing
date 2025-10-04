@@ -55,4 +55,4 @@ This extension uses **Gemini AI** to generate search queries. You need an API ke
 6. Open the project folder → find `background.js`.  
 7. Replace the placeholder line:  
    ```javascript
-   const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+   Paste this key to the Gemini Key input box in the Gear icon
